@@ -1,0 +1,292 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-padding-top: 4rem;
+    scroll-behavior: smooth;
+    list-style: none;
+    text-decoration: none;
+}
+
+:root{
+--main-color:#bc9667;
+--second-color:#edeae3;
+--text-color:#1b1b1b;
+--bg-color:#fff;
+--box-shadow: 2px 2px 10px 4px rgb(14 55 54 /15%)
+}
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background: #1b1b1b;
+    margin: 0;
+    padding: 10px;
+}
+h2, h3 {
+    color: #333;
+}
+a {
+    text-decoration: none;
+}
+/* Loader styles */
+/* Loader Styles */
+.loader {
+width: 65px;
+aspect-ratio: 1;
+position: relative;
+}
+.loader:before,
+.loader:after {
+content: "";
+position: absolute;
+border-radius: 50px;
+box-shadow: 0 0 0 3px inset #fff;
+animation: l4 2.5s infinite;
+}
+.loader:after {
+animation-delay: -1.25s;
+}
+@keyframes l4 {
+0% {
+inset: 0 35px 35px 0;
+}
+12.5% {
+inset: 0 35px 0 0;
+}
+25% {
+inset: 35px 35px 0 0;
+}
+37.5% {
+inset: 35px 0 0 0;
+}
+50% {
+inset: 35px 0 0 35px;
+}
+62.5% {
+inset: 0 0 0 35px;
+}
+75% {
+inset: 0 0 35px 35px;
+}
+87.5% {
+inset: 0 0 35px 0;
+}
+100% {
+inset: 0 35px 35px 0;
+}
+}
+
+/* Full-screen loader styles */
+#loadingContainer {
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: #1b1b1b;
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000; /* Keep it above other elements */
+}
+/* Product detail styles */
+.product-detail-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin: auto;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.slides {
+    display: none;
+}
+.slides img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    padding: 16px;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.3s;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.prev {
+    left: 15px;
+}
+.next {
+    right: 15px;
+}
+.dot-container {
+    text-align: center;
+    margin-top: 10px;
+}
+.dot {
+    cursor: pointer;
+    height: 12px;
+    width: 12px;
+    margin: 0 4px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+.active {
+    background-color: #717171;
+}
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.btn{
+    padding: 10px 40px;
+    border-radius: 15px;
+    background: var(--main-color);
+    color: var(--bg-color);
+    font-weight: 500;
+}
+
+.btn:hover{
+    background: #8a6f4d;
+}
+
+
+.name{
+    color: #606162;
+    text-transform: capitalize;
+    font-size: 27px;
+   }
+
+.price{
+    color: #606162;
+    text-transform: capitalize;
+
+}
+
+.text{
+    background: rgba(179, 179, 179, 0.45);
+    display: grid;
+    padding: 20px;
+    border-radius: 20px;
+}
+.line{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+   
+}
+.line p{
+    color: #606162;
+   
+}
+
+.text1{
+    display: grid;
+    justify-content: start; /* Optional: Center horizontally */
+}
+
+.alert {
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+    margin: 10px 0;
+    width: auto;
+    border-radius: 20px;
+    animation: fadeIn 0.5s, fadeOut 0.5s 2.5s ;
+   
+}
+
+.alert.success {
+    background-color: #4CAF50; /* Green */
+}
+
+.alert.error {
+    background-color: #f44336; /* Red */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Add to your existing CSS */
+.back-btn {
+    background-color: var(--main-color); /* Use your main color variable or choose a color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.back-btn i {
+    margin-right: 5px; /* Add some spacing between the icon and text */
+    font-size: 1.2em;
+}
+
+.back-btn:hover {
+    background-color: #333; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly enlarge the button */
+}
+
+.back-btn:active {
+    transform: scale(0.95); /* Press effect */
+}
+
+/* Adjust for smaller screens */
+@media (max-width: 600px) {
+    .back-btn {
+        padding: 8px 16px;
+        font-size: 0.9em;
+        top: 10px;
+        left: 10px;
+    }
+}

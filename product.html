@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ND Shop Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="icon" type="image/x-icon" href="/img/IMG_4882.PNG">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
+</head>
+<body>
+    <div id="loadingContainer">
+        <div class="loader"></div>
+    </div> <!-- Loader container -->
+
+    <button id="backBtn" class="back-btn"><i class="bx bx-arrow-back"></i> Back</button> <!-- Updated Back Button -->
+
+    <div class="product-detail-container" style="display:none;" id="productContainer">
+        <div id="productDetail" class="product-detail"></div><br>
+        <h3>To Order</h3>
+        <div id="alertContainer"></div> <!-- Alert container -->
+        <form id="orderForm">
+            <input type="text" id="customerName" required placeholder="Enter your Name">
+            <input type="text" id="customerPhone" required placeholder="Enter your phone number">
+            <a class="btn" onclick="placeOrder()">Order</a>
+        </form>
+    </div>
+
+    <!-- Your existing script below -->
+    <script>
+        // Existing JavaScript code remains unchanged
+
+        // Event listener for the back button
+        document.getElementById('backBtn').addEventListener('click', function() {
+            window.history.back(); // or window.location.href = 'index.html'; for navigating to a specific page
+        });
+    </script>
+</body>
+
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAK-dzBJ9sIwgQJ7iR0Kh_MvOLy7i-F3O0",
+            authDomain: "blog-ad58e.firebaseapp.com",
+            databaseURL: "https://blog-ad58e-default-rtdb.firebaseio.com",
+            projectId: "blog-ad58e",
+            storageBucket: "blog-ad58e.appspot.com",
+            messagingSenderId: "921348005047",
+            appId: "1:921348005047:web:2d9797dae380482aa40132",
+            measurementId: "G-WRESM9JHSG"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        const productDetail = document.getElementById('productDetail');
+        const loadingContainer = document.getElementById('loadingContainer');
+        const productContainer = document.getElementById('productContainer');
+
+        // Fetch product details
+        database.ref(`products/${productId}`).on('value', (snapshot) => {
+            const product = snapshot.val();
+            const images = product.imageUrls.map((url, index) => 
+                `<div class="slides" style="display: ${index === 0 ? 'block' : 'none'};">
+                    <img src="${url}" alt="${product.productName}">
+                </div>`).join('');
+
+            const dots = product.imageUrls.map((_, index) => 
+                `<span class="dot" onclick="currentSlide(${index})"></span>`).join('');
+
+            productDetail.innerHTML = `
+                <div class="slideshow-container">
+                    ${images}
+                    <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+                    <a class="next" onclick="changeSlide(1)">&#10095;</a>
+                </div>
+                <div class="dot-container">
+                    ${dots}
+                 </div>
+                 <div class="text">
+                     <div class="text1">
+                     <h3 class="name">${product.productName}</h3>
+                      </div>
+                   <div class="line">   
+                     <p class="price">${product.productPrice} ETB</p>
+                     <p><i class="bx bx-car"></i> Delivery ${product.deliveryOption}</p>       
+                   </div>
+                   <p class="price">${product.productDescription}</p>
+                 </div>
+            `;
+
+            // Hide loader and show the product details
+            loadingContainer.style.display = 'none';
+            productContainer.style.display = 'block';
+            
+            showSlides(slideIndex); // Show the first slide
+        });
+
+        let slideIndex = 0;
+
+        function showSlides(n) {
+            const slides = document.getElementsByClassName("slides");
+            const dots = document.getElementsByClassName("dot");
+
+            if (n >= slides.length) { slideIndex = 0; }
+            if (n < 0) { slideIndex = slides.length - 1; }
+
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+
+            slides[slideIndex].style.display = "block";  
+            dots[slideIndex].className += " active"; 
+        }
+
+        function changeSlide(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            slideIndex = n;
+            showSlides(slideIndex);
+        }
+
+        function placeOrder() {
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+
+            // Check if name or phone number is missing
+            if (!customerName) {
+                showAlert('Please enter your name.', 'error');
+                return;
+            }
+            if (!customerPhone) {
+                showAlert('Please enter your phone number.', 'error');
+                return;
+            }
+
+            const orderId = database.ref('orders').push().key;
+
+            const orderData = {
+                productId,
+                customerName,
+                customerPhone,
+                timestamp: Date.now(),
+            };
+
+            database.ref(`orders/${orderId}`).set(orderData)
+                .then(() => {
+                    showAlert('Thank you for your order! We’ll reply within 1 hour to 48 hours.', 'success');
+                    document.getElementById('orderForm').reset();
+                })
+                .catch((error) => {
+                    console.error('Error placing order:', error);
+                    showAlert('Error placing order. Please try again.', 'error');
+                });
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert ${type}`;
+            alertBox.innerHTML = message;
+
+            alertContainer.appendChild(alertBox);
+            
+            // Remove the alert after 3 seconds
+            setTimeout(() => {
+                alertBox.remove();
+            }, 3000);
+        }
+
+        // Add this event listener for the back button
+        document.getElementById('backBtn').addEventListener('click', function() {
+            window.close();
+        });
+    </script>
+</body>
+</html>
